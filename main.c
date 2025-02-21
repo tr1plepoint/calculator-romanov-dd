@@ -2,7 +2,7 @@
 #include <ctype.h>
 
 typedef struct {
-    double arr[50];
+    int arr[1500];
     int top;
 } OperatorStack;
 
@@ -16,7 +16,7 @@ int isEmpty(OperatorStack* stack) {
     return stack->top == -1;
 }
 
-void push(OperatorStack* stack, double value) {
+void push(OperatorStack* stack, int value) {
 
     stack->arr[++stack->top] = value;
 }
@@ -29,7 +29,7 @@ void pop(OperatorStack* stack) {
     stack->top--;
 }
 
-double peek(OperatorStack* stack) {
+int peek(OperatorStack* stack) {
 
     if (isEmpty(stack)) {
         return -1;
@@ -44,7 +44,7 @@ void printStack(OperatorStack* stack) {
     printf("Printing stack: \n");
     int index = 0;
     while (index <= stack->top) {
-        printf("%f\n", stack->arr[index]);
+        printf("%d\n", stack->arr[index]);
         index++;
     }
 }
@@ -64,7 +64,7 @@ int precedence(char op) {
     return 0;
 }
 
-double applyOp(double a, double b, char op) {
+int applyOp(int a, int b, char op) {
 
     switch (op) {
     case '+':
@@ -93,18 +93,21 @@ int main()
     
     //while (1) {
 
-//        printf("Enter mathematical expression: \n");
+        //printf("Enter mathematical expression: \n");
 
         fgets(expression, sizeof(expression), stdin);
-//        printf("Entered: %s", expression);
+        //printf("Entered: %s\n", expression);
 
-        for (int i = 0; expression[i] != 10; i++) {
-
+        for (int i = 0; expression[i] != 0; i++) {
+            
+            //printf("%d %d\n", i, expression[i]);
+            
             if (expression[i] == 32) //скип пробела
                 continue;
             else if (isdigit(expression[i])) {
-                double num = 0;
+                int num = 0;
                 while (expression[i] != 10 && isdigit(expression[i])) {
+                    //printf("%d %d\n", i, expression[i]);
                     num = num * 10 + (expression[i] - '0');
                     i++;
                 }
@@ -116,16 +119,16 @@ int main()
 
                 while (!isEmpty(&operators) && precedence(peek(&operators)) >= precedence(expression[i])) {
 
-                    double firstOperand = peek(&operands);
+                    int firstOperand = peek(&operands);
                     pop(&operands);
 
-                    double secondOperand = peek(&operands);
+                    int secondOperand = peek(&operands);
                     pop(&operands);
 
                     char op = (char)peek(&operators);
                     pop(&operators);
 
-                    double result = applyOp(secondOperand, firstOperand, op);
+                    int result = applyOp(secondOperand, firstOperand, op);
 
                     push(&operands, result);
                 }
@@ -143,16 +146,16 @@ int main()
 
                 while (!isEmpty(&operators) && peek(&operators) != '(') {
 
-                    double firstOperand = peek(&operands);
+                    int firstOperand = peek(&operands);
                     pop(&operands);
 
-                    double secondOperand = peek(&operands);
+                    int secondOperand = peek(&operands);
                     pop(&operands);
 
                     char op = (char)peek(&operators);
                     pop(&operators);
 
-                    double result = applyOp(secondOperand, firstOperand, op);
+                    int result = applyOp(secondOperand, firstOperand, op);
 
                     push(&operands, result);
                 }
@@ -163,29 +166,29 @@ int main()
 
 //            printf("Operators: \n");
 //            printStack(&operators);
-//
+
 //            printf("Operands: \n");
 //            printStack(&operands);
         }
 
 //        printf("Operators final: \n");
 //        printStack(&operators);
-//
+
 //        printf("Operands final: \n");
 //        printStack(&operands);
 
         while (!isEmpty(&operators)) {
 
-            double firstOperand = peek(&operands);
+            int firstOperand = peek(&operands);
             pop(&operands);
 
-            double secondOperand = peek(&operands);
+            int secondOperand = peek(&operands);
             pop(&operands);
 
             char op = (char)peek(&operators);
             pop(&operators);
 
-            double result = applyOp(secondOperand, firstOperand, op);
+            int result = applyOp(secondOperand, firstOperand, op);
 
             
 
@@ -194,7 +197,7 @@ int main()
 
         
 
-        printf("%g\n", peek(&operands));
+        printf("%d\n", peek(&operands));
     //}
     return 0;
 }
